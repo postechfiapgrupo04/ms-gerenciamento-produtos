@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ms-produtodb:
+    image: postgres
+    environment:
+      POSTGRES_DB: produtodb
+      POSTGRES_USER: produto
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ms-produtodb:5432/ms-produtodb
+      SPRING_DATASOURCE_USERNAME: produto
+      SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      - ms-produtodb
+
+volumes:
+  postgres_data:
